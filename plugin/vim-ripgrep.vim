@@ -145,5 +145,21 @@ fun! s:RgShowRoot()
   endif
 endfun
 
+fun! RipGrep(text)
+    " publicly exposed ripgrep function so you can make your own ripgrep
+    " command whose name doesn't conflict with fzf ripgrep. eg:
+    " command! -nargs=* -complete=file Rg :call RipGrep(<q-args>)
+    call s:Rg(a:text)
+endfun
+
+fun! RipGrepCommand(txt)
+    " allows this to be made into a command like so:
+    " command! -nargs=* Ripgrep call RipGrepCommand('<q-args>')
+    " which lets you more issue queries like this ergonomically:
+    " :Ripgrep grep without quoting 
+    " (the above is equivalent to :Rg "grep without quoting")
+    call s:Rg(a:txt)
+endfun
+
 command! -nargs=* -complete=file Rg :call s:Rg(<q-args>)
 command! RgRoot :call s:RgShowRoot()
