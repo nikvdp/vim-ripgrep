@@ -161,5 +161,13 @@ fun! RipGrepCommand(txt)
     call s:Rg(a:txt)
 endfun
 
-command! -nargs=* -complete=file Rg :call s:Rg(<q-args>)
+fun! s:RgVisualOrTxt(txt = "")
+  if mode() ==# 'v' && !empty(getline("'<", "'>"))
+    call g:RgVisual()
+  else
+    call s:RgGrepContext(function('s:RgSearch'), s:RgSearchTerm(a:txt))
+  endif
+endfun
+
+command! -range -nargs=* -complete=file Rg :call s:RgVisualOrTxt(<q-args>)
 command! RgRoot :call s:RgShowRoot()
